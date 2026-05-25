@@ -42,5 +42,23 @@ void ARotatingPlatform::Tick(float DeltaTime)
 	UE_LOG(LogTemp, Warning, TEXT("RotationRate | X:%f, Y:%f, Z:%f"), RotationRate.X, RotationRate.Y, RotationRate.Z);
 	UE_LOG(LogTemp, Warning, TEXT("Gravity | X:%f, Y:%f, Z:%f"), Gravity.X, Gravity.Y, Gravity.Z);
 	UE_LOG(LogTemp, Warning, TEXT("Acceleration | X:%f, Y:%f, Z:%f"), Acceleration.X, Acceleration.Y, Acceleration.Z);
+	
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Blue, 
+			FString::Printf(TEXT("Tilt | X:%f, Y:%f, Z:%f"), Tilt.X, Tilt.Y, Tilt.Z));
+		
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Blue, 
+			FString::Printf(TEXT("RotationRate | X:%f, Y:%f, Z:%f"), RotationRate.X, RotationRate.Y, RotationRate.Z));
+		
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Blue, 
+			FString::Printf(TEXT("Gravity | X:%f, Y:%f, Z:%f"), Gravity.X, Gravity.Y, Gravity.Z));
+		
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Blue, 
+			FString::Printf(TEXT("Acceleration | X:%f, Y:%f, Z:%f"), Acceleration.X, Acceleration.Y, Acceleration.Z));
+		
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Blue, 
+			FString::Printf(TEXT("-------------")));
+	}
 }
 
