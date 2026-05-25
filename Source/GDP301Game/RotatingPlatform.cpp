@@ -38,6 +38,8 @@ void ARotatingPlatform::Tick(float DeltaTime)
 	FVector Acceleration;
 	PlayerController->GetInputMotionState(Tilt, RotationRate, Gravity, Acceleration);
 	
+	
+	
 	UE_LOG(LogTemp, Warning, TEXT("Tilt | X:%f, Y:%f, Z:%f"), Tilt.X, Tilt.Y, Tilt.Z);
 	UE_LOG(LogTemp, Warning, TEXT("RotationRate | X:%f, Y:%f, Z:%f"), RotationRate.X, RotationRate.Y, RotationRate.Z);
 	UE_LOG(LogTemp, Warning, TEXT("Gravity | X:%f, Y:%f, Z:%f"), Gravity.X, Gravity.Y, Gravity.Z);
