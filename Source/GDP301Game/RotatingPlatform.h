@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "InputAction.h"
 #include "RotatingPlatform.generated.h"
+
 
 class AMovementLine;
 
@@ -19,10 +21,16 @@ public:
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	UFUNCTION(BlueprintCallable)
+	void UpdateRotation(float Value);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Speed", meta=(AllowPrivateAccess=true))
+	float RotationSpeed = 100.0f;
 	
 	UPROPERTY(EditDefaultsOnly, Category="Speed", meta=(AllowPrivateAccess=true))
 	float Speed = 100.0f;
