@@ -8,6 +8,18 @@ AMovementLine::AMovementLine()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
+	Root = CreateDefaultSubobject<USceneComponent>("Root");
+	SetRootComponent(Root);
+	
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
+	Mesh->SetupAttachment(Root);
+	
+	ClampLeft = CreateDefaultSubobject<USceneComponent>("Clamp Left");
+	ClampLeft->SetupAttachment(Mesh);
+	
+	ClampRight = CreateDefaultSubobject<USceneComponent>("Clamp Right");
+	ClampRight->SetupAttachment(Mesh);
 
 }
 

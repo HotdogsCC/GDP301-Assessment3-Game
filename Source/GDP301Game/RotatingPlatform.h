@@ -24,6 +24,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
+	UPROPERTY(EditDefaultsOnly, Category="Speed", meta=(AllowPrivateAccess=true))
+	float Speed = 100.0f;
+	
 	UPROPERTY(EditInstanceOnly, Category="Movement Line", meta=(AllowPrivateAccess=true))
 	AMovementLine* MovementLine;
 	

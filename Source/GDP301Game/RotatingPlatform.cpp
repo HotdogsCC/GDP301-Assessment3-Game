@@ -85,9 +85,10 @@ void ARotatingPlatform::TickMovement(const float DeltaTime)
 	}
 	
 	FVector Location = GetActorLocation();
-	Location.Y += GetActorRotation().Roll * DeltaTime;
+	Location.Y += GetActorRotation().Roll * DeltaTime * Speed;
 	Location = MovementLine->GetClampedLocation(Location);
 	SetActorLocation(Location);
+	
 }
 
 // Called every frame
