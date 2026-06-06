@@ -27,6 +27,14 @@ void ARotatingPlatform::BeginPlay()
 	
 }
 
+// Called every frame
+void ARotatingPlatform::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	TickRotation(DeltaTime);
+	TickMovement(DeltaTime);
+}
+
 void ARotatingPlatform::TickRotation(const float DeltaTime)
 {
 	//get the player controller
@@ -48,7 +56,7 @@ void ARotatingPlatform::TickRotation(const float DeltaTime)
 	float CurrentRoll = GetActorRotation().Roll;
 	
 	//get where the tilt wants to be
-	float TargetRoll = FMath::Clamp(Tilt.X, -0.6f, 0.6f);
+	float TargetRoll = FMath::Clamp(RollInput, -0.6f, 0.6f);
 	//flip the sign if the phone is held the other way
 	if (Tilt.Y < 0.5) TargetRoll *= -1.0f;
 	//convert to degrees
@@ -99,65 +107,11 @@ void ARotatingPlatform::TickMovement(const float DeltaTime)
 	
 }
 
-// Called every frame
-void ARotatingPlatform::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	//TickRotation(DeltaTime);
-	TickMovement(DeltaTime);
-}
+
 
 void ARotatingPlatform::UpdateRotation(float Value)
 {
-	//get the player controller
-	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
-	if (!PlayerController)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed to get the player controller"));
-		return;
-	}
-	
-	//get the rotation information from the phone
-	FVector Tilt;
-	FVector RotationRate;
-	FVector Gravity;
-	FVector Acceleration;
-	PlayerController->GetInputMotionState(Tilt, RotationRate, Gravity, Acceleration);
-	
-	//get where the rotation currently this
-	float CurrentRoll = GetActorRotation().Roll;
-	
-	//get where the tilt wants to be
-	float TargetRoll = FMath::Clamp(Value, -0.6f, 0.6f);
-	//flip the sign if the phone is held the other way
-	if (Tilt.Y < 0.5) TargetRoll *= -1.0f;
-	//convert to degrees
-	TargetRoll = FMath::RadiansToDegrees(TargetRoll);
-	
-	//the amount the rotation should change this frame
-	float ThisRotationDelta = RotationSpeed * UGameplayStatics::GetWorldDeltaSeconds(this);
-	
-	FRotator ThisRotation = FRotator::ZeroRotator;
-	
-	//is the current rotation close enough to the target?
-	if (FMath::Abs(CurrentRoll - TargetRoll) <= ThisRotationDelta)
-	{
-		ThisRotation.Roll = TargetRoll;
-	}
-	else
-	{
-		//is the current roll larger than the target?
-		if (CurrentRoll > TargetRoll)
-		{
-			ThisRotation.Roll = CurrentRoll - ThisRotationDelta;
-		}
-		else
-		{
-			ThisRotation.Roll = CurrentRoll + ThisRotationDelta;
-		}
-	}
-	
-	SetActorRotation(ThisRotation);
+	RollInput = Value;
 }
 
 //todo old debug code

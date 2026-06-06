@@ -50,6 +50,10 @@ private:
 	
 	UFUNCTION()
 	void TickMovement(const float DeltaTime);
+	
+	//the inputted roll value
+	UPROPERTY()
+	float RollInput = 0.0f;
 
 
 };
