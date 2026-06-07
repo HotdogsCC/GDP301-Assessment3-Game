@@ -3,6 +3,7 @@
 
 #include "BlockBase.h"
 
+#include "BlockSlime.h"
 #include "RotatingPlatform.h"
 
 // Sets default values
@@ -24,7 +25,6 @@ void ABlockBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Mesh->OnComponentHit.AddDynamic(this, &ABlockBase::OnMeshCollision);
 	Mesh->OnComponentBeginOverlap.AddDynamic(this, &ABlockBase::OnMeshOverlap);
 	UE_LOG(LogTemp, Warning, TEXT("bound"));
 	
@@ -35,6 +35,16 @@ void ABlockBase::OnCollisionWithPlatform(ARotatingPlatform* Platform)
 	bIsFalling = false;
 }
 
+void ABlockBase::OnCollisionWithBlockSlime(ABlockSlime* BlockSlime)
+{
+	bIsFalling = false;
+}
+
+bool ABlockBase::GetIsFalling() const
+{
+	return bIsFalling;
+}
+
 // Called every frame
 void ABlockBase::Tick(float DeltaTime)
 {
@@ -43,20 +53,14 @@ void ABlockBase::Tick(float DeltaTime)
 	TickFalling(DeltaTime);
 }
 
-void ABlockBase::OnMeshCollision(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	FVector NormalImpulse, const FHitResult& Hit)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Some kind of collision"));
-	
-	//was it a platform?
-	if (!OtherActor) return;
-	if (ARotatingPlatform* Platform = Cast<ARotatingPlatform>(OtherActor)) OnCollisionWithPlatform(Platform);
-}
-
 void ABlockBase::OnMeshOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Some kind of overlap"));
+	//was it a platform?
+	if (!OtherActor) return;
+	
+	if (ARotatingPlatform* Platform = Cast<ARotatingPlatform>(OtherActor)) OnCollisionWithPlatform(Platform);
+	else if (ABlockSlime* BlockSlime = Cast<ABlockSlime>(OtherActor)) OnCollisionWithBlockSlime(BlockSlime);
 }
 
 void ABlockBase::TickFalling(float DeltaTime)

@@ -17,4 +17,5 @@ class GDP301GAME_API ABlockSlime : public ABlockBase
 protected:
 	virtual void OnCollisionWithPlatform(ARotatingPlatform* Platform) override;
 	
+	virtual void OnCollisionWithBlockSlime(ABlockSlime* BlockSlime) override;
 };

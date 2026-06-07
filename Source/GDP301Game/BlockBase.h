@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "BlockBase.generated.h"
 
+class ABlockSlime;
 class ARotatingPlatform;
 
 UCLASS()
@@ -26,6 +27,11 @@ protected:
 	
 	virtual void OnCollisionWithPlatform(ARotatingPlatform* Platform);
 	
+	virtual void OnCollisionWithBlockSlime(ABlockSlime* BlockSlime);
+	
+	UFUNCTION()
+	bool GetIsFalling() const;
+	
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess=true))
 	USceneComponent* Root;
 	
@@ -33,10 +39,6 @@ protected:
 	UStaticMeshComponent* Mesh;
 
 private:
-	UFUNCTION()
-	void OnMeshCollision(UPrimitiveComponent* HitComponent, AActor* OtherActor, 
-		UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit );
-	
 	UFUNCTION()
 	void OnMeshOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, 
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

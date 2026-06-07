@@ -7,9 +7,20 @@
 
 void ABlockSlime::OnCollisionWithPlatform(ARotatingPlatform* Platform)
 {
+	//ignore if this is not falling (already attached)
+	if (!GetIsFalling()) return;
+	
 	Super::OnCollisionWithPlatform(Platform);
 	
-	UE_LOG(LogTemp, Warning, TEXT("slime block hit platform"));
-	
 	AttachToActor(Platform, FAttachmentTransformRules::KeepWorldTransform);
+}
+
+void ABlockSlime::OnCollisionWithBlockSlime(ABlockSlime* BlockSlime)
+{
+	//ignore if this is not falling (already attached)
+	if (!GetIsFalling()) return;
+	
+	Super::OnCollisionWithBlockSlime(BlockSlime);
+	
+	AttachToActor(BlockSlime, FAttachmentTransformRules::KeepWorldTransform);
 }
