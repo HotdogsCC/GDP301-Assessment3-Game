@@ -6,8 +6,18 @@
 #include "GameFramework/Actor.h"
 #include "BlockBase.generated.h"
 
+class AStackemsGameMode;
 class ABlockSlime;
 class ARotatingPlatform;
+
+UENUM(Blueprintable)
+enum class EBlockColour : uint8
+{
+	Red,
+	Yellow,
+	Green,
+	Blue
+};
 
 UCLASS()
 class GDP301GAME_API ABlockBase : public AActor
@@ -20,6 +30,24 @@ public:
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	UFUNCTION()
+	bool GetIsFalling() const;
+	
+	UFUNCTION()
+	EBlockColour GetBlockColour() const;
+	
+	UFUNCTION()
+	void StopFalling();
+	
+	UFUNCTION()
+	void UnattachAndStartFalling();
+	
+	UFUNCTION()
+	void MakeAttachedBlocksFall();
+	
+	UFUNCTION()
+	void SetFallSpeed(float InSpeed);
 
 protected:
 	// Called when the game starts or when spawned
@@ -29,8 +57,7 @@ protected:
 	
 	virtual void OnCollisionWithBlockSlime(ABlockSlime* BlockSlime);
 	
-	UFUNCTION()
-	bool GetIsFalling() const;
+	AStackemsGameMode* GetStackemsGameMode() const;
 	
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess=true))
 	USceneComponent* Root;
@@ -51,4 +78,10 @@ private:
 	
 	UPROPERTY()
 	bool bIsFalling = true;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Colour", meta=(AllowPrivateAccess=true));
+	EBlockColour BlockColour = EBlockColour::Red;
+	
+	UPROPERTY()
+	AStackemsGameMode* StackemsGameMode;
 };

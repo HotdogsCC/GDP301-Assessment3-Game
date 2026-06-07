@@ -4,6 +4,8 @@
 #include "BlockSlime.h"
 
 #include "RotatingPlatform.h"
+#include "StackemsGameMode.h"
+#include "Kismet/GameplayStatics.h"
 
 void ABlockSlime::OnCollisionWithPlatform(ARotatingPlatform* Platform)
 {
@@ -13,6 +15,9 @@ void ABlockSlime::OnCollisionWithPlatform(ARotatingPlatform* Platform)
 	Super::OnCollisionWithPlatform(Platform);
 	
 	AttachToActor(Platform, FAttachmentTransformRules::KeepWorldTransform);
+	
+	GetStackemsGameMode()->PlaySlimeSound();
+	GetStackemsGameMode()->AddPoint();
 }
 
 void ABlockSlime::OnCollisionWithBlockSlime(ABlockSlime* BlockSlime)
@@ -23,4 +28,7 @@ void ABlockSlime::OnCollisionWithBlockSlime(ABlockSlime* BlockSlime)
 	Super::OnCollisionWithBlockSlime(BlockSlime);
 	
 	AttachToActor(BlockSlime, FAttachmentTransformRules::KeepWorldTransform);
+	
+	GetStackemsGameMode()->PlaySlimeSound();
+	GetStackemsGameMode()->AddPoint();
 }

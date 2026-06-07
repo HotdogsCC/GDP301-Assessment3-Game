@@ -3,7 +3,7 @@
 
 #include "BlockSpawner.h"
 
-#include "BlockSlime.h"
+#include "BlockBase.h"
 #include "MovementLine.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -27,6 +27,10 @@ void ABlockSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
+	FallSpeed += DeltaTime;
+	TimeBetweenSpawns -= DeltaTime * 0.025f;
+	if (TimeBetweenSpawns <= 0.5f) TimeBetweenSpawns = 0.5f;
+	
 	//increase how long it has been since the last spawn
 	ElapsedTimeSinceLastSpawn += DeltaTime;
 	
@@ -49,7 +53,11 @@ void ABlockSpawner::Tick(float DeltaTime)
 		SpawnLocation.Y = FMath::RandRange(LeftLocation.Y, RightLocation.Y);
 		SpawnLocation.Z = GetActorLocation().Z;
 		
-		GetWorld()->SpawnActor(SlimeBlockBlueprint, &SpawnLocation);
+		const TSubclassOf<ABlockBase> SlimeToSpawn = 
+			SlimeBlockBlueprints[FMath::RandRange(0, SlimeBlockBlueprints.Num() - 1)];
+		
+		AActor* BlockActor = GetWorld()->SpawnActor(SlimeToSpawn, &SpawnLocation);
+		Cast<ABlockBase>(BlockActor)->SetFallSpeed(FallSpeed);
 	}
 
 }

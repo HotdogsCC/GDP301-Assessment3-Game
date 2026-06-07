@@ -5,6 +5,8 @@
 
 #include "BlockSlime.h"
 #include "RotatingPlatform.h"
+#include "StackemsGameMode.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ABlockBase::ABlockBase()
@@ -26,8 +28,20 @@ void ABlockBase::BeginPlay()
 	Super::BeginPlay();
 	
 	Mesh->OnComponentBeginOverlap.AddDynamic(this, &ABlockBase::OnMeshOverlap);
-	UE_LOG(LogTemp, Warning, TEXT("bound"));
 	
+	AGameModeBase* GameModeBase = UGameplayStatics::GetGameMode(this);
+	if (!GameModeBase)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to find game mode base in block slime"));
+		return;
+	}
+	
+	StackemsGameMode = Cast<AStackemsGameMode>(GameModeBase);
+	if (!StackemsGameMode)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to cast tp stackems game mode base in block slime"));
+		return;
+	}
 }
 
 void ABlockBase::OnCollisionWithPlatform(ARotatingPlatform* Platform)
@@ -38,12 +52,71 @@ void ABlockBase::OnCollisionWithPlatform(ARotatingPlatform* Platform)
 void ABlockBase::OnCollisionWithBlockSlime(ABlockSlime* BlockSlime)
 {
 	bIsFalling = false;
+	
+	//is this other block the same colour as me?
+	if (BlockColour == BlockSlime->GetBlockColour())
+	{
+		//award two points
+		GetStackemsGameMode()->AddPoint();
+		GetStackemsGameMode()->AddPoint();
+		
+		//kill us both
+		BlockSlime->MakeAttachedBlocksFall();
+		BlockSlime->Destroy();
+		
+		MakeAttachedBlocksFall();
+		Destroy();
+	}
+}
+
+AStackemsGameMode* ABlockBase::GetStackemsGameMode() const
+{
+	return StackemsGameMode;
 }
 
 bool ABlockBase::GetIsFalling() const
 {
 	return bIsFalling;
 }
+
+EBlockColour ABlockBase::GetBlockColour() const
+{
+	return BlockColour;
+}
+
+void ABlockBase::StopFalling()
+{
+	bIsFalling = false;
+}
+
+void ABlockBase::UnattachAndStartFalling()
+{
+	AttachToActor(nullptr, FAttachmentTransformRules::KeepWorldTransform);
+	
+	bIsFalling = true;
+}
+
+void ABlockBase::MakeAttachedBlocksFall()
+{
+	TArray<AActor*> AttachedActors;
+	GetAttachedActors(AttachedActors);
+
+	for (auto AttachedActor : AttachedActors)
+	{
+		if (!AttachedActor) continue;
+		
+		ABlockBase* BlockBase = Cast<ABlockBase>(AttachedActor);
+		if (!BlockBase) continue;
+		
+		BlockBase->UnattachAndStartFalling();
+	}
+}
+
+void ABlockBase::SetFallSpeed(float InSpeed)
+{
+	FallSpeed = InSpeed;
+}
+
 
 // Called every frame
 void ABlockBase::Tick(float DeltaTime)

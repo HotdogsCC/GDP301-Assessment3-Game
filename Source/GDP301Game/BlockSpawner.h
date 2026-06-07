@@ -6,8 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "BlockSpawner.generated.h"
 
+class ABlockBase;
 class AMovementLine;
-class ABlockSlime;
 
 UCLASS()
 class GDP301GAME_API ABlockSpawner : public AActor
@@ -29,13 +29,16 @@ private:
 	float TimeBetweenSpawns = 3.0f;
 	
 	UPROPERTY()
-	float ElapsedTimeSinceLastSpawn = 0.0f;
+	float ElapsedTimeSinceLastSpawn = 67.0f;
 	
 	UPROPERTY(EditDefaultsOnly, Category="Blueprints", meta=(AllowPrivateAccess=true))
-	TSubclassOf<ABlockSlime> SlimeBlockBlueprint;
+	TArray<TSubclassOf<ABlockBase>> SlimeBlockBlueprints;
 	
 	UPROPERTY(EditInstanceOnly, Category="Scene References", meta=(AllowPrivateAccess=true))
 	AMovementLine* MovementLine;
+	
+	UPROPERTY()
+	float FallSpeed = 100.0f;
 	
 
 };
