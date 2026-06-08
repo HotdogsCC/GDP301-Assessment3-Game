@@ -6,6 +6,7 @@
 #include "Engine/StaticMeshActor.h"
 #include "GameOverZone.generated.h"
 
+class AStackemsGameMode;
 class ABlockBase;
 /**
  * 
@@ -34,4 +35,10 @@ private:
 	
 	UPROPERTY(EditInstanceOnly, meta=(AllowPrivateAccess=true))
 	bool bIsVoid = false;
+	
+	UPROPERTY()
+	AStackemsGameMode* StackemsGameMode;
+	
+	UPROPERTY()
+	float MercyTime = 0.0f;
 };

@@ -22,6 +22,8 @@ public:
 	
 	void GameOver();
 	
+	UGameUIWidget* GetGameUIWidget() const;
+	
 protected:
 	virtual void BeginPlay() override;
 	

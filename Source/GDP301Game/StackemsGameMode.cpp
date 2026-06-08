@@ -52,6 +52,11 @@ void AStackemsGameMode::GameOver()
 	Cast<ABlockSpawner>(BlockSpawnerActor)->SetActorTickEnabled(false);
 }
 
+UGameUIWidget* AStackemsGameMode::GetGameUIWidget() const
+{
+	return GameUIWidget;
+}
+
 void AStackemsGameMode::BeginPlay()
 {
 	Super::BeginPlay();
